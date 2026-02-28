@@ -206,16 +206,14 @@
       z-index: 1;
     }
 
-    /* ─── HERO ─── */
+    /* ─── HERO: Demo-first ─── */
     .hero {
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
       text-align: center;
       position: relative;
-      padding: 4rem 0;
+      padding: 6rem 0 4rem;
     }
 
     .hero::after {
@@ -225,21 +223,21 @@
       left: 50%;
       transform: translateX(-50%);
       width: 1px;
-      height: 100px;
+      height: 80px;
       background: linear-gradient(to bottom, var(--accent), transparent);
       opacity: 0.25;
     }
 
     .hero-name {
       font-family: var(--display);
-      font-size: clamp(3.8rem, 11vw, 8rem);
+      font-size: clamp(2.4rem, 7vw, 4.5rem);
       font-weight: 400;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: #dde2ef;
       line-height: 1;
-      margin-bottom: 0.4em;
-      animation: fadeUp 1.2s ease-out;
+      margin-bottom: 0.5em;
+      animation: fadeUp 1s ease-out;
       text-shadow:
         0 0 40px rgba(139, 172, 212, 0.1),
         0 0 80px rgba(139, 172, 212, 0.05);
@@ -249,28 +247,35 @@
       color: var(--accent);
     }
 
-    .hero-latin {
-      font-family: var(--display);
-      font-style: italic;
-      font-size: 1.15rem;
-      font-weight: 300;
+    .hero-tagline {
+      font-size: 1.1rem;
       color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.02em;
+      animation: fadeUp 1s ease-out 0.15s both;
+    }
+
+    .hero-tagline strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .hero-demo {
+      width: 100%;
       margin-bottom: 3rem;
-      letter-spacing: 0.06em;
-      animation: fadeUp 1.2s ease-out 0.2s both;
+      animation: fadeUp 1s ease-out 0.3s both;
+    }
+
+    .hero-demo .terminal {
+      margin-top: 0;
     }
 
     .hero-desc {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       color: var(--text-muted);
       max-width: 520px;
-      margin-bottom: 3.5rem;
-      animation: fadeUp 1.2s ease-out 0.4s both;
-    }
-
-    .hero-desc strong {
-      color: var(--text);
-      font-weight: 400;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 1s ease-out 0.5s both;
     }
 
     .install-block {
@@ -611,19 +616,16 @@
       .container { padding: 0 1.5rem; }
       section { padding: 5rem 0; }
 
-      .hero { padding: 3rem 0; }
+      .hero { padding: 4rem 0 3rem; }
       .hero-name {
         letter-spacing: 0.1em;
-        font-size: clamp(2.8rem, 13vw, 5rem);
+        font-size: clamp(2rem, 10vw, 3.2rem);
       }
-      .hero-latin {
-        font-size: 1rem;
-        margin-bottom: 2.5rem;
-      }
+      .hero-tagline { font-size: 1rem; margin-bottom: 2rem; }
+      .hero-demo { margin-bottom: 2.5rem; }
       .hero-desc {
-        font-size: 1.05rem;
+        font-size: 1rem;
         padding: 0 0.5rem;
-        margin-bottom: 3rem;
       }
       .hero::after { height: 60px; }
 
@@ -694,12 +696,9 @@
 
       .hero-name {
         letter-spacing: 0.06em;
-        font-size: clamp(2.4rem, 14vw, 3.5rem);
+        font-size: clamp(1.8rem, 12vw, 2.6rem);
       }
-      .hero-latin {
-        font-size: 0.92rem;
-        letter-spacing: 0.03em;
-      }
+      .hero-tagline { font-size: 0.92rem; }
       .hero-desc { font-size: 1rem; }
 
       .install-block {
@@ -724,7 +723,7 @@
     @media (max-width: 360px) {
       .hero-name {
         letter-spacing: 0.04em;
-        font-size: 2.2rem;
+        font-size: 1.7rem;
       }
       .install-block {
         font-size: 0.74rem;
@@ -820,12 +819,65 @@
 
   <div class="container">
 
-    <!-- HERO -->
+    <!-- HERO: Demo-first -->
     <section class="hero">
       <h1 class="hero-name">Consili<span>um</span></h1>
-      <p class="hero-latin">consilium (Latin): counsel, deliberation, plan</p>
+      <p class="hero-tagline"><strong>5 frontier LLMs debate. Claude judges.</strong></p>
+
+      <div class="hero-demo">
+        <div class="terminal">
+          <div class="terminal-bar">
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <div class="terminal-dot"></div>
+            <span class="terminal-title">consilium — council mode</span>
+          </div>
+          <div class="terminal-body">
+            <div class="terminal-line" style="animation-delay: 0.1s"><span class="t-prompt">$</span> <span class="t-cmd">consilium "Should we use microservices or monolith?"</span></div>
+            <div class="terminal-line" style="animation-delay: 0.3s"><span class="t-status">(querying 5 models in parallel)</span></div>
+            <div class="terminal-line" style="animation-delay: 0.5s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 0.6s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+            <div class="terminal-line" style="animation-delay: 0.8s"><span class="t-phase"> BLIND POSITIONS </span></div>
+            <div class="terminal-line" style="animation-delay: 0.9s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+            <div class="terminal-line" style="animation-delay: 1.1s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 1.2s"><span class="t-model">GPT</span></div>
+            <div class="terminal-line" style="animation-delay: 1.4s"><span class="t-text">Start monolith. Extract services at pain points, not before.</span></div>
+            <div class="terminal-line" style="animation-delay: 1.5s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 1.6s"><span class="t-model">Gemini</span></div>
+            <div class="terminal-line" style="animation-delay: 1.8s"><span class="t-text">Modular monolith with domain boundaries. Deploy as one,</span></div>
+            <div class="terminal-line" style="animation-delay: 1.9s"><span class="t-text">split later if needed.</span></div>
+            <div class="terminal-line" style="animation-delay: 2.0s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 2.1s"><span class="t-model">Grok</span></div>
+            <div class="terminal-line" style="animation-delay: 2.3s"><span class="t-text">Microservices — but only if you have the team and the</span></div>
+            <div class="terminal-line" style="animation-delay: 2.4s"><span class="t-text">operational maturity. Otherwise you're buying complexity.</span></div>
+            <div class="terminal-line" style="animation-delay: 2.6s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 2.7s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+            <div class="terminal-line" style="animation-delay: 2.9s"><span class="t-phase"> DEBATE: ROUND 1 </span></div>
+            <div class="terminal-line" style="animation-delay: 3.0s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+            <div class="terminal-line" style="animation-delay: 3.1s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 3.2s"><span class="t-model">Grok</span> <span class="t-status">(challenger)</span></div>
+            <div class="terminal-line" style="animation-delay: 3.4s"><span class="t-text">4/5 said monolith. But none addressed data team independence.</span></div>
+            <div class="terminal-line" style="animation-delay: 3.5s"><span class="t-text">Shared DB = shared bottleneck.</span></div>
+            <div class="terminal-line" style="animation-delay: 3.7s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 3.8s"><span class="t-notice">&gt;&gt;&gt; Consensus detected (4/5 agreement) — debate concluded</span></div>
+            <div class="terminal-line" style="animation-delay: 4.0s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 4.1s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+            <div class="terminal-line" style="animation-delay: 4.3s"><span class="t-phase"> JUDGE SYNTHESIS </span></div>
+            <div class="terminal-line" style="animation-delay: 4.4s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+            <div class="terminal-line" style="animation-delay: 4.5s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 4.6s"><span class="t-section">Recommendation</span></div>
+            <div class="terminal-line" style="animation-delay: 4.8s"><span class="t-text">Modular monolith with event-driven boundaries. Challenger</span></div>
+            <div class="terminal-line" style="animation-delay: 4.9s"><span class="t-text">raised valid data isolation concern — address with async</span></div>
+            <div class="terminal-line" style="animation-delay: 5.0s"><span class="t-text">event bus for cross-domain communication.</span></div>
+            <div class="terminal-line" style="animation-delay: 5.2s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 5.3s"><span class="t-confidence">Confidence: high (4/5 convergence)</span></div>
+            <div class="terminal-line" style="animation-delay: 5.5s">&nbsp;</div>
+            <div class="terminal-line" style="animation-delay: 5.6s"><span class="t-stats">(14.2s, ~$0.48)</span></div>
+          </div>
+        </div>
+      </div>
+
       <p class="hero-desc">
-        <strong>5 frontier LLMs debate. Claude judges.</strong>
         Structured multi-model deliberation for decisions that matter,
         grounded in decades of group reasoning research.
       </p>
@@ -860,63 +912,6 @@
           <div class="step-number">III</div>
           <div class="step-title">Judgement</div>
           <div class="step-desc">Claude Opus synthesises using Analysis of Competing Hypotheses. Evaluates evidence against each position. Eliminates rather than confirms.</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- COUNCIL SESSION -->
-    <section class="reveal">
-      <div class="section-label">In practice</div>
-      <h2>A council in session</h2>
-
-      <div class="terminal">
-        <div class="terminal-bar">
-          <div class="terminal-dot"></div>
-          <div class="terminal-dot"></div>
-          <div class="terminal-dot"></div>
-          <span class="terminal-title">consilium — council mode</span>
-        </div>
-        <div class="terminal-body">
-          <div class="terminal-line" style="animation-delay: 0.1s"><span class="t-prompt">$</span> <span class="t-cmd">consilium "Should we use microservices or monolith?"</span></div>
-          <div class="terminal-line" style="animation-delay: 0.3s"><span class="t-status">(querying 5 models in parallel)</span></div>
-          <div class="terminal-line" style="animation-delay: 0.5s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 0.6s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
-          <div class="terminal-line" style="animation-delay: 0.8s"><span class="t-phase"> BLIND POSITIONS </span></div>
-          <div class="terminal-line" style="animation-delay: 0.9s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
-          <div class="terminal-line" style="animation-delay: 1.1s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 1.2s"><span class="t-model">GPT</span></div>
-          <div class="terminal-line" style="animation-delay: 1.4s"><span class="t-text">Start monolith. Extract services at pain points, not before.</span></div>
-          <div class="terminal-line" style="animation-delay: 1.5s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 1.6s"><span class="t-model">Gemini</span></div>
-          <div class="terminal-line" style="animation-delay: 1.8s"><span class="t-text">Modular monolith with domain boundaries. Deploy as one,</span></div>
-          <div class="terminal-line" style="animation-delay: 1.9s"><span class="t-text">split later if needed.</span></div>
-          <div class="terminal-line" style="animation-delay: 2.0s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 2.1s"><span class="t-model">Grok</span></div>
-          <div class="terminal-line" style="animation-delay: 2.3s"><span class="t-text">Microservices — but only if you have the team and the</span></div>
-          <div class="terminal-line" style="animation-delay: 2.4s"><span class="t-text">operational maturity. Otherwise you're buying complexity.</span></div>
-          <div class="terminal-line" style="animation-delay: 2.6s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 2.7s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
-          <div class="terminal-line" style="animation-delay: 2.9s"><span class="t-phase"> DEBATE: ROUND 1 </span></div>
-          <div class="terminal-line" style="animation-delay: 3.0s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
-          <div class="terminal-line" style="animation-delay: 3.1s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 3.2s"><span class="t-model">Grok</span> <span class="t-status">(challenger)</span></div>
-          <div class="terminal-line" style="animation-delay: 3.4s"><span class="t-text">4/5 said monolith. But none addressed data team independence.</span></div>
-          <div class="terminal-line" style="animation-delay: 3.5s"><span class="t-text">Shared DB = shared bottleneck.</span></div>
-          <div class="terminal-line" style="animation-delay: 3.7s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 3.8s"><span class="t-notice">&gt;&gt;&gt; Consensus detected (4/5 agreement) — debate concluded</span></div>
-          <div class="terminal-line" style="animation-delay: 4.0s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 4.1s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
-          <div class="terminal-line" style="animation-delay: 4.3s"><span class="t-phase"> JUDGE SYNTHESIS </span></div>
-          <div class="terminal-line" style="animation-delay: 4.4s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
-          <div class="terminal-line" style="animation-delay: 4.5s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 4.6s"><span class="t-section">Recommendation</span></div>
-          <div class="terminal-line" style="animation-delay: 4.8s"><span class="t-text">Modular monolith with event-driven boundaries. Challenger</span></div>
-          <div class="terminal-line" style="animation-delay: 4.9s"><span class="t-text">raised valid data isolation concern — address with async</span></div>
-          <div class="terminal-line" style="animation-delay: 5.0s"><span class="t-text">event bus for cross-domain communication.</span></div>
-          <div class="terminal-line" style="animation-delay: 5.2s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 5.3s"><span class="t-confidence">Confidence: high (4/5 convergence)</span></div>
-          <div class="terminal-line" style="animation-delay: 5.5s">&nbsp;</div>
-          <div class="terminal-line" style="animation-delay: 5.6s"><span class="t-stats">(14.2s, ~$0.48)</span></div>
         </div>
       </div>
     </section>
@@ -1084,8 +1079,8 @@
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Pause terminal animations until visible
-    document.querySelectorAll('.terminal-line').forEach(line => {
+    // Pause terminal animations until visible — except hero demo (plays on load)
+    document.querySelectorAll('.reveal .terminal-line').forEach(line => {
       line.style.animationPlayState = 'paused';
     });
 
