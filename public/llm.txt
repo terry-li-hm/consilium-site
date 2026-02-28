@@ -1,0 +1,53 @@
+# consilium
+
+Multi-model deliberation CLI. 5 frontier LLMs debate a question, then Claude Opus judges and synthesises.
+
+## What it does
+consilium runs structured multi-model deliberation for complex decisions. It queries 5 frontier language models (GPT, Gemini, Grok, DeepSeek, GLM) independently, facilitates debate between them, and has Claude Opus synthesise using Analysis of Competing Hypotheses.
+
+## Installation
+pip install consilium
+# or
+uv tool install consilium
+
+## Setup
+export OPENROUTER_API_KEY=sk-or-v1-...
+
+## Usage
+consilium "Should we use microservices or monolith?"
+consilium "Career decision" --council --persona "context about you"
+consilium "Stress test this plan" --redteam
+consilium "Binary choice" --oxford
+consilium "Explore this topic" --discuss
+
+## Modes
+- council (~$0.50): Full multi-round deliberation with blind phase, debate, judge
+- quick (~$0.10): Parallel independent sampling, no debate
+- oxford (~$0.40): Binary for/against debate with verdict
+- redteam (~$0.20): Adversarial stress-test of a plan
+- socratic (~$0.30): Probing questions to expose assumptions
+- discuss (~$0.30): Hosted roundtable exploration
+- solo (~$0.40): Claude debates itself in multiple roles
+
+## Pipeline
+1. Blind Phase: All models generate independent positions in parallel (anti-anchoring)
+2. Deliberation: Models debate with a rotating challenger arguing the contrarian position
+3. Judgement: Claude Opus synthesises using Analysis of Competing Hypotheses (ACH)
+
+## Key Design Principles
+- Independence before exposure (Surowiecki, Delphi, Tetlock)
+- Structured dissent via rotating challenger (Nemeth 2001)
+- Convergence as multiplicative signal (Good Judgment Project)
+- ACH framework for judge synthesis (Heuer/CIA)
+
+## Models
+Council: GPT (gpt-5.2-pro), Gemini (gemini-3.1-pro-preview), Grok (grok-4), DeepSeek (deepseek-r1), GLM (glm-5)
+Judge: Claude Opus (claude-opus-4-6)
+
+## Links
+- Source: https://github.com/terry-li-hm/consilium
+- PyPI: https://pypi.org/project/consilium/
+- Author: Terry Li (https://github.com/terry-li-hm)
+
+## License
+MIT

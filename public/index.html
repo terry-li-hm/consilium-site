@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>consilium — multi-model deliberation</title>
+  <meta name="description" content="5 frontier LLMs debate. Claude judges. Better decisions through structured deliberation.">
+  <meta property="og:title" content="consilium.sh">
+  <meta property="og:description" content="Multi-model deliberation CLI — 5 frontier LLMs debate, then Claude judges.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://consilium.sh">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #08080a;
+      --bg-elevated: #111114;
+      --bg-code: #0e0e11;
+      --text: #e2ded8;
+      --text-muted: #7a756e;
+      --text-dim: #4a4640;
+      --accent: #c4a04a;
+      --accent-dim: rgba(196, 160, 74, 0.12);
+      --accent-glow: rgba(196, 160, 74, 0.06);
+      --border: #1e1d20;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'IBM Plex Sans', -apple-system, sans-serif;
+      --mono: 'IBM Plex Mono', 'SF Mono', monospace;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      padding: 4rem 0;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      height: 80px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      opacity: 0.4;
+    }
+
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 10vw, 7rem);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 0.3em;
+      animation: fadeUp 1s ease-out;
+    }
+
+    .hero-name span {
+      color: var(--accent);
+    }
+
+    .hero-latin {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.04em;
+      animation: fadeUp 1s ease-out 0.15s both;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-bottom: 3rem;
+      animation: fadeUp 1s ease-out 0.3s both;
+    }
+
+    .hero-desc strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .install-block {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.4rem;
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: inline-block;
+      position: relative;
+      animation: fadeUp 1s ease-out 0.45s both;
+    }
+
+    .install-block .prompt { color: var(--accent); }
+    .install-block .cmd { color: var(--text); }
+
+    /* ─── SECTIONS ─── */
+    section {
+      padding: 6rem 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 2rem;
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .section-text {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-bottom: 3rem;
+    }
+
+    /* ─── PIPELINE ─── */
+    .pipeline {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 0;
+      align-items: start;
+      margin-top: 3rem;
+    }
+
+    .pipeline-step {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.8rem 1.5rem;
+      position: relative;
+    }
+
+    .pipeline-step:hover {
+      border-color: var(--accent);
+      transition: border-color 0.3s ease;
+    }
+
+    .step-number {
+      font-family: var(--serif);
+      font-size: 2.4rem;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+      opacity: 0.6;
+    }
+
+    .step-title {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      margin-bottom: 0.6rem;
+      color: var(--text);
+    }
+
+    .step-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .pipeline-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.8rem;
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      padding-top: 2rem;
+    }
+
+    /* ─── TERMINAL ─── */
+    .terminal {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 3rem;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .terminal-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--text-dim);
+    }
+
+    .terminal-title {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-left: 0.5rem;
+    }
+
+    .terminal-body {
+      padding: 1.2rem 1.4rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .terminal-body .t-prompt { color: var(--accent); }
+    .terminal-body .t-cmd { color: var(--text); }
+    .terminal-body .t-muted { color: var(--text-dim); }
+    .terminal-body .t-label { color: var(--text-muted); }
+    .terminal-body .t-model { color: var(--accent); opacity: 0.8; }
+    .terminal-body .t-text { color: var(--text-muted); }
+    .terminal-body .t-judge { color: var(--accent); }
+    .terminal-body .t-highlight { color: var(--text); }
+
+    .terminal-line {
+      opacity: 0;
+      animation: terminalReveal 0.3s ease-out forwards;
+    }
+
+    /* ─── MODES ─── */
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 3rem;
+    }
+
+    .mode-card {
+      background: var(--bg);
+      padding: 1.5rem;
+      transition: background 0.2s ease;
+    }
+
+    .mode-card:hover {
+      background: var(--bg-elevated);
+    }
+
+    .mode-name {
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .mode-cost {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+    }
+
+    .mode-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── RESEARCH ─── */
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .research-item {
+      border-left: 1px solid var(--accent);
+      padding-left: 1.2rem;
+    }
+
+    .research-principle {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .research-source {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      margin-bottom: 0.5rem;
+    }
+
+    .research-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      padding: 4rem 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .footer-links a {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover { color: var(--accent); }
+
+    .footer-credit {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .pipeline {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+      .pipeline-arrow {
+        transform: rotate(90deg);
+        padding: 0;
+      }
+      .modes-grid {
+        grid-template-columns: 1fr;
+      }
+      .research-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer {
+        flex-direction: column;
+      }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes terminalReveal {
+      from { opacity: 0; transform: translateX(-4px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="container">
+    <section class="hero">
+      <h1 class="hero-name">Consili<span>um</span></h1>
+      <p class="hero-latin">consilium (Latin): counsel, deliberation, plan</p>
+      <p class="hero-desc">
+        <strong>5 frontier LLMs debate. Claude judges.</strong>
+        Structured multi-model deliberation for decisions that matter,
+        grounded in decades of group reasoning research.
+      </p>
+      <div class="install-block">
+        <span class="prompt">$</span> <span class="cmd">uv tool install consilium</span>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="reveal">
+      <div class="section-label">How it works</div>
+      <h2>Blind. Debate. Judge.</h2>
+      <p class="section-text">
+        The pipeline is designed to prevent anchoring, ensure genuine disagreement,
+        and synthesise competing perspectives into actionable recommendations.
+      </p>
+
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="step-number">I</div>
+          <div class="step-title">Blind Phase</div>
+          <div class="step-desc">All models generate independent positions in parallel. No model sees another's answer. Prevents first-speaker anchoring.</div>
+        </div>
+        <div class="pipeline-arrow">&#8594;</div>
+        <div class="pipeline-step">
+          <div class="step-number">II</div>
+          <div class="step-title">Deliberation</div>
+          <div class="step-desc">Models see all blind claims, then debate. A rotating challenger must argue the contrarian position. Consensus triggers early exit.</div>
+        </div>
+        <div class="pipeline-arrow">&#8594;</div>
+        <div class="pipeline-step">
+          <div class="step-number">III</div>
+          <div class="step-title">Judgement</div>
+          <div class="step-desc">Claude Opus synthesises using Analysis of Competing Hypotheses. Evaluates evidence against each position. Eliminates rather than confirms.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COUNCIL SESSION -->
+    <section class="reveal">
+      <div class="section-label">In practice</div>
+      <h2>A council in session</h2>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <span class="terminal-title">consilium — council mode</span>
+        </div>
+        <div class="terminal-body">
+          <div class="terminal-line" style="animation-delay: 0.1s"><span class="t-prompt">$</span> <span class="t-cmd">consilium "Should we use microservices or monolith?"</span></div>
+          <div class="terminal-line" style="animation-delay: 0.4s"><span class="t-muted">───────────────────────────────────────────────</span></div>
+          <div class="terminal-line" style="animation-delay: 0.7s"><span class="t-label">Blind phase</span> <span class="t-muted">· 5 models · independent positions</span></div>
+          <div class="terminal-line" style="animation-delay: 1.0s">&nbsp;&nbsp;<span class="t-model">GPT</span> <span class="t-text">Start monolith. Extract services at pain points.</span></div>
+          <div class="terminal-line" style="animation-delay: 1.3s">&nbsp;&nbsp;<span class="t-model">Gemini</span> <span class="t-text">Modular monolith with domain boundaries.</span></div>
+          <div class="terminal-line" style="animation-delay: 1.6s">&nbsp;&nbsp;<span class="t-model">Grok</span> <span class="t-text">Microservices — but only if you have the team.</span></div>
+          <div class="terminal-line" style="animation-delay: 1.9s">&nbsp;&nbsp;<span class="t-model">DeepSeek</span> <span class="t-text">Monolith. Premature distribution is the root of all evil.</span></div>
+          <div class="terminal-line" style="animation-delay: 2.2s">&nbsp;&nbsp;<span class="t-model">GLM</span> <span class="t-text">Event-driven monolith with async boundaries.</span></div>
+          <div class="terminal-line" style="animation-delay: 2.7s"><span class="t-muted">───────────────────────────────────────────────</span></div>
+          <div class="terminal-line" style="animation-delay: 3.0s"><span class="t-label">Debate</span> <span class="t-muted">· round 1 · challenger: Grok</span></div>
+          <div class="terminal-line" style="animation-delay: 3.3s">&nbsp;&nbsp;<span class="t-model">Grok</span> <span class="t-text">4/5 said monolith. But none addressed data team</span></div>
+          <div class="terminal-line" style="animation-delay: 3.5s">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-text">independence. Shared DB = shared bottleneck.</span></div>
+          <div class="terminal-line" style="animation-delay: 3.9s"><span class="t-muted">───────────────────────────────────────────────</span></div>
+          <div class="terminal-line" style="animation-delay: 4.2s"><span class="t-judge">Judge</span> <span class="t-muted">· Claude Opus · ACH synthesis</span></div>
+          <div class="terminal-line" style="animation-delay: 4.5s">&nbsp;&nbsp;<span class="t-highlight">Decision: Modular monolith with event boundaries.</span></div>
+          <div class="terminal-line" style="animation-delay: 4.8s">&nbsp;&nbsp;<span class="t-highlight">Confidence: high (4/5 convergence + challenger</span></div>
+          <div class="terminal-line" style="animation-delay: 5.0s">&nbsp;&nbsp;<span class="t-highlight">raised valid data isolation concern).</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODES -->
+    <section class="reveal">
+      <div class="section-label">Modes</div>
+      <h2>Seven ways to deliberate</h2>
+      <p class="section-text">
+        From quick parallel sampling to full adversarial stress-testing.
+        Auto-routes by difficulty, or choose explicitly.
+      </p>
+
+      <div class="modes-grid">
+        <div class="mode-card">
+          <div class="mode-name">--council</div>
+          <div class="mode-cost">~$0.50</div>
+          <div class="mode-desc">Full multi-round deliberation with blind phase, debate, and judge synthesis.</div>
+        </div>
+        <div class="mode-card">
+          <div class="mode-name">--quick</div>
+          <div class="mode-cost">~$0.10</div>
+          <div class="mode-desc">Parallel independent sampling. Fast opinions without debate.</div>
+        </div>
+        <div class="mode-card">
+          <div class="mode-name">--oxford</div>
+          <div class="mode-cost">~$0.40</div>
+          <div class="mode-desc">Binary for/against debate with rebuttals and a verdict.</div>
+        </div>
+        <div class="mode-card">
+          <div class="mode-name">--redteam</div>
+          <div class="mode-cost">~$0.20</div>
+          <div class="mode-desc">Adversarial stress-test of a plan or proposal.</div>
+        </div>
+        <div class="mode-card">
+          <div class="mode-name">--socratic</div>
+          <div class="mode-cost">~$0.30</div>
+          <div class="mode-desc">Probing questions to expose hidden assumptions.</div>
+        </div>
+        <div class="mode-card">
+          <div class="mode-name">--discuss</div>
+          <div class="mode-cost">~$0.30</div>
+          <div class="mode-desc">Hosted roundtable exploration of open-ended topics.</div>
+        </div>
+        <div class="mode-card">
+          <div class="mode-name">--solo</div>
+          <div class="mode-cost">~$0.40</div>
+          <div class="mode-desc">Claude debates itself in multiple assigned roles.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESEARCH -->
+    <section class="reveal">
+      <div class="section-label">Foundations</div>
+      <h2>Research, not vibes</h2>
+      <p class="section-text">
+        Every design decision maps to validated principles from group deliberation research.
+      </p>
+
+      <div class="research-grid">
+        <div class="research-item">
+          <div class="research-principle">Independence before exposure</div>
+          <div class="research-source">Surowiecki · Delphi · Tetlock</div>
+          <div class="research-desc">The blind phase captures positions before herding. The single most validated principle in group reasoning.</div>
+        </div>
+        <div class="research-item">
+          <div class="research-principle">Structured dissent</div>
+          <div class="research-source">Nemeth 2001</div>
+          <div class="research-desc">Assigned devil's advocates tend to produce bolstering, not genuine reconsideration. The challenger uses questions and different priors instead.</div>
+        </div>
+        <div class="research-item">
+          <div class="research-principle">Convergence as signal</div>
+          <div class="research-source">Tetlock · Good Judgment Project</div>
+          <div class="research-desc">When independent agents with different priors agree, the evidence is multiplicative. The judge extremises convergent conclusions.</div>
+        </div>
+        <div class="research-item">
+          <div class="research-principle">Competing hypotheses</div>
+          <div class="research-source">Heuer · CIA ACH Framework</div>
+          <div class="research-desc">The judge lists competing conclusions, evaluates evidence against each, and eliminates rather than confirms. Counters confirmation bias.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODELS -->
+    <section class="reveal">
+      <div class="section-label">The council</div>
+      <h2>Five deliberators. One judge.</h2>
+
+      <div class="terminal" style="max-width: 520px;">
+        <div class="terminal-bar">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <span class="terminal-title">models</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="t-label">Council</span></div>
+          <div>&nbsp;&nbsp;<span class="t-model">GPT</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-muted">gpt-5.2-pro</span></div>
+          <div>&nbsp;&nbsp;<span class="t-model">Gemini</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-muted">gemini-3.1-pro-preview</span></div>
+          <div>&nbsp;&nbsp;<span class="t-model">Grok</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-muted">grok-4</span></div>
+          <div>&nbsp;&nbsp;<span class="t-model">DeepSeek</span>&nbsp;&nbsp;<span class="t-muted">deepseek-r1</span></div>
+          <div>&nbsp;&nbsp;<span class="t-model">GLM</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-muted">glm-5</span></div>
+          <div>&nbsp;</div>
+          <div><span class="t-judge">Judge</span></div>
+          <div>&nbsp;&nbsp;<span class="t-judge">Claude</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-muted">claude-opus-4-6</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSTALL -->
+    <section class="reveal">
+      <div class="section-label">Get started</div>
+      <h2>One command.</h2>
+
+      <div class="terminal" style="max-width: 520px;">
+        <div class="terminal-bar">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <span class="terminal-title">install</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="t-prompt">$</span> <span class="t-cmd">uv tool install consilium</span></div>
+          <div><span class="t-prompt">$</span> <span class="t-cmd">export OPENROUTER_API_KEY=sk-or-v1-...</span></div>
+          <div><span class="t-prompt">$</span> <span class="t-cmd">consilium "Your question here"</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-links">
+        <a href="https://github.com/terry-li-hm/consilium">GitHub</a>
+        <a href="https://pypi.org/project/consilium/">PyPI</a>
+        <a href="/llm.txt">llm.txt</a>
+      </div>
+      <div class="footer-credit">
+        Built by <a href="https://github.com/terry-li-hm" style="color: var(--text-muted); text-decoration: none;">Terry Li</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+
+          // Trigger terminal line animations when terminal becomes visible
+          const lines = entry.target.querySelectorAll('.terminal-line');
+          lines.forEach(line => {
+            line.style.animationPlayState = 'running';
+          });
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Pause terminal animations until visible
+    document.querySelectorAll('.terminal-line').forEach(line => {
+      line.style.animationPlayState = 'paused';
+    });
+  </script>
+</body>
+</html>
