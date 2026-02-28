@@ -6,9 +6,7 @@ Multi-model deliberation CLI. 5 frontier LLMs debate a question, then Claude Opu
 consilium runs structured multi-model deliberation for complex decisions. It queries 5 frontier language models (GPT, Gemini, Grok, DeepSeek, GLM) independently, facilitates debate between them, and has Claude Opus synthesise using Analysis of Competing Hypotheses.
 
 ## Installation
-pip install consilium
-# or
-uv tool install consilium
+cargo install consilium
 
 ## Setup
 export OPENROUTER_API_KEY=sk-or-v1-...
@@ -46,7 +44,7 @@ Judge: Claude Opus (claude-opus-4-6)
 
 ## Links
 - Source: https://github.com/terry-li-hm/consilium
-- PyPI: https://pypi.org/project/consilium/
+- crates.io: https://crates.io/crates/consilium
 - Author: Terry Li (https://github.com/terry-li-hm)
 
 ## License
