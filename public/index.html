@@ -459,7 +459,7 @@
     .terminal-body .t-text { color: var(--text-muted); }
     .terminal-body .t-judge { color: var(--accent); }
     .terminal-body .t-highlight { color: var(--text); }
-    .terminal-body .t-sep { color: var(--text-dim); }
+    .terminal-body .t-sep { color: var(--text-dim); overflow: hidden; display: block; }
     .terminal-body .t-phase { color: #7ec8d8; font-weight: 500; }
     .terminal-body .t-section { color: #8badd4; font-weight: 500; }
     .terminal-body .t-notice { color: #8cc88c; font-weight: 500; }
@@ -657,7 +657,9 @@
         font-size: 0.75rem;
         padding: 1.2rem;
         line-height: 1.7;
-        /* Let long lines scroll rather than wrap awkwardly */
+      }
+      /* Only nowrap for static terminals (models, install) — hero demo wraps */
+      .terminal-body:not(#hero-terminal) {
         white-space: nowrap;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
