@@ -216,11 +216,24 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       text-align: center;
       position: relative;
-      padding: 6rem 0 5rem;
+      padding: 5rem 0 0;
+      /* Image + gradient overlay stacked via CSS background layers */
+      background-image:
+        linear-gradient(
+          to bottom,
+          rgba(4, 4, 8, 0.82) 0%,
+          rgba(4, 4, 8, 0.55) 25%,
+          rgba(4, 4, 8, 0.15) 50%,
+          rgba(4, 4, 8, 0.15) 70%,
+          rgba(4, 4, 8, 0.85) 100%
+        ),
+        url('/og-image.jpg');
+      background-size: cover;
+      background-position: center center;
     }
 
     .hero::after {
@@ -230,7 +243,7 @@
       left: 0;
       width: 100%;
       height: 1px;
-      background: linear-gradient(to right, rgba(139, 172, 212, 0.12), transparent 60%);
+      background: linear-gradient(to right, rgba(139, 172, 212, 0.15), transparent 60%);
     }
 
     .hero-name {
@@ -244,8 +257,9 @@
       margin-bottom: 0.3em;
       animation: fadeUp 1s ease-out;
       text-shadow:
-        0 0 40px rgba(139, 172, 212, 0.1),
-        0 0 80px rgba(139, 172, 212, 0.05);
+        0 0 40px rgba(139, 172, 212, 0.15),
+        0 0 80px rgba(139, 172, 212, 0.08),
+        0 2px 12px rgba(4, 4, 8, 0.8);
     }
 
     .hero-name span {
@@ -261,6 +275,7 @@
       margin-bottom: 2.5rem;
       letter-spacing: 0.05em;
       animation: fadeUp 1s ease-out 0.15s both;
+      text-shadow: 0 1px 8px rgba(4, 4, 8, 0.9);
     }
 
     .hero-desc {
@@ -270,12 +285,15 @@
       margin-bottom: 3rem;
       line-height: 1.75;
       animation: fadeUp 1s ease-out 0.3s both;
+      text-shadow: 0 1px 8px rgba(4, 4, 8, 0.9);
     }
 
     .hero-desc strong {
       color: var(--text);
       font-weight: 500;
     }
+
+    .hero-spacer { flex: 1; min-height: 3rem; }
 
     .install-block {
       background: var(--void-code);
@@ -836,6 +854,7 @@
         Structured multi-model deliberation for decisions that matter,
         grounded in decades of group reasoning research.
       </p>
+      <div class="hero-spacer"></div>
       <div class="install-block">
         <span class="prompt">$</span>&nbsp;<span class="cmd">cargo install consilium</span><span class="cursor"></span>
       </div>
