@@ -206,12 +206,11 @@
       z-index: 1;
     }
 
-    /* ─── HERO: Demo-first ─── */
+    /* ─── HERO: Demo-first, left-aligned ─── */
     .hero {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      text-align: center;
+      align-items: flex-start;
       position: relative;
       padding: 6rem 0 4rem;
     }
@@ -220,12 +219,10 @@
       content: '';
       position: absolute;
       bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1px;
-      height: 80px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      opacity: 0.25;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, rgba(139, 172, 212, 0.12), transparent 60%);
     }
 
     .hero-name {
@@ -635,11 +632,7 @@
       }
       .hero-tagline { font-size: 1rem; margin-bottom: 2rem; }
       .hero-demo { margin-bottom: 2.5rem; }
-      .hero-desc {
-        font-size: 1rem;
-        padding: 0 0.5rem;
-      }
-      .hero::after { height: 60px; }
+      .hero-desc { font-size: 1rem; }
 
       .pipeline {
         grid-template-columns: 1fr;
@@ -1035,42 +1028,42 @@
     // stream = text to type char-by-char, with class for styling
     // pause = ms to wait before next entry
     const script = [
-      { html: '<span class="t-prompt">$</span> ', stream: 'consilium "Should we use microservices or monolith?"', cls: 't-cmd', speed: 28 },
+      { html: '<span class="t-prompt">$</span> ', stream: 'consilium "Should we acquire this fintech or build in-house?"', cls: 't-cmd', speed: 28 },
       { pause: 400 },
-      { html: '<span class="t-status">(querying 5 models in parallel)</span>', pause: 600 },
+      { html: '<span class="t-status">(querying 5 models in parallel)</span>', pause: 700 },
       { html: '&nbsp;' },
-      { html: '<span class="t-sep">────────────────────────────────────────────────────</span>' },
-      { html: '<span class="t-phase"> BLIND POSITIONS </span>', pause: 200 },
-      { html: '<span class="t-sep">────────────────────────────────────────────────────</span>' },
+      { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
+      { html: '<span class="t-phase"> BLIND PHASE (independent claims) </span>', pause: 200 },
+      { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '&nbsp;' },
-      { html: '<span class="t-model">GPT</span>' },
-      { stream: 'Start monolith. Extract services at pain points, not before.', cls: 't-text' },
+      { html: '<span class="t-model">### GPT-5.2 Pro</span>' },
+      { stream: 'Acquire. Time-to-market advantage outweighs the integration cost. Their regulatory approvals alone took 18 months.', cls: 't-text' },
       { html: '&nbsp;' },
-      { html: '<span class="t-model">Gemini</span>' },
-      { stream: 'Modular monolith with domain boundaries. Deploy as one, split later if needed.', cls: 't-text' },
+      { html: '<span class="t-model">### Gemini 3.1 Pro</span>' },
+      { stream: 'Build. Their tech debt is a liability, not an asset. You\'d spend more unwinding it than starting clean.', cls: 't-text' },
       { html: '&nbsp;' },
-      { html: '<span class="t-model">Grok</span>' },
-      { stream: 'Microservices — but only if you have the team and the operational maturity. Otherwise you\'re buying complexity.', cls: 't-text' },
+      { html: '<span class="t-model">### Grok 4</span>' },
+      { stream: 'Acquire, but only at 0.6x revenue. Above that, build. The talent is the real asset — structure an acqui-hire fallback.', cls: 't-text' },
       { html: '&nbsp;', pause: 300 },
-      { html: '<span class="t-sep">────────────────────────────────────────────────────</span>' },
+      { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '<span class="t-phase"> DEBATE: ROUND 1 </span>', pause: 200 },
-      { html: '<span class="t-sep">────────────────────────────────────────────────────</span>' },
+      { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '&nbsp;' },
-      { html: '<span class="t-model">Grok</span> <span class="t-status">(challenger)</span>' },
-      { stream: '4/5 said monolith. But none addressed data team independence. Shared DB = shared bottleneck.', cls: 't-text' },
+      { html: '<span class="t-model">### Gemini 3.1 Pro</span> <span class="t-status">(challenger)</span>' },
+      { stream: 'Everyone\'s pricing in the regulatory moat, but none of you modelled the integration timeline. 12–18 months to merge platforms — by then you could build v1.', cls: 't-text' },
       { html: '&nbsp;', pause: 200 },
-      { html: '<span class="t-notice">&gt;&gt;&gt; Consensus detected (4/5 agreement) — debate concluded</span>', pause: 500 },
+      { html: '<span class="t-notice">&gt;&gt;&gt; CONSENSUS DETECTED (4/5: acquire with conditions) - proceeding to judge</span>', pause: 500 },
       { html: '&nbsp;' },
-      { html: '<span class="t-sep">────────────────────────────────────────────────────</span>' },
+      { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '<span class="t-phase"> JUDGE SYNTHESIS </span>', pause: 200 },
-      { html: '<span class="t-sep">────────────────────────────────────────────────────</span>' },
+      { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '&nbsp;' },
-      { html: '<span class="t-section">Recommendation</span>' },
-      { stream: 'Modular monolith with event-driven boundaries. Challenger raised valid data isolation concern — address with async event bus for cross-domain communication.', cls: 't-text', speed: 18 },
+      { html: '<span class="t-section">## Recommendation</span>' },
+      { stream: 'Conditional acquisition at ≤0.6x revenue with 90-day technical due diligence. Challenger\'s integration risk is valid — require escrow tied to platform migration milestones. If price exceeds threshold, pivot to acqui-hire for the compliance team.', cls: 't-text', speed: 18 },
       { html: '&nbsp;' },
-      { html: '<span class="t-confidence">Confidence: high (4/5 convergence)</span>' },
+      { html: '<span class="t-confidence">Confidence: 8/10</span>' },
       { html: '&nbsp;' },
-      { html: '<span class="t-stats">(14.2s, ~$0.48)</span>' },
+      { html: '<span class="t-stats">(18.7s, ~$0.52)</span>' },
     ];
 
     function addLine(container, innerHTML) {
