@@ -264,10 +264,18 @@
     .terminal-body .t-cmd { color: var(--text); }
     .terminal-body .t-muted { color: var(--text-dim); }
     .terminal-body .t-label { color: var(--text-muted); }
-    .terminal-body .t-model { color: var(--accent); opacity: 0.8; }
+    .terminal-body .t-model { color: #e5c97b; font-weight: 500; }
     .terminal-body .t-text { color: var(--text-muted); }
     .terminal-body .t-judge { color: var(--accent); }
     .terminal-body .t-highlight { color: var(--text); }
+    /* Semantic colors matching CLI output */
+    .terminal-body .t-sep { color: var(--text-dim); }
+    .terminal-body .t-phase { color: #7ec8d8; font-weight: 500; }
+    .terminal-body .t-section { color: #7aabde; font-weight: 500; }
+    .terminal-body .t-notice { color: #8cc88c; font-weight: 500; }
+    .terminal-body .t-confidence { color: #c4a0d4; font-weight: 500; }
+    .terminal-body .t-status { color: var(--text-dim); font-style: italic; }
+    .terminal-body .t-stats { color: var(--text-dim); }
 
     .terminal-line {
       opacity: 0;
@@ -485,22 +493,45 @@
         </div>
         <div class="terminal-body">
           <div class="terminal-line" style="animation-delay: 0.1s"><span class="t-prompt">$</span> <span class="t-cmd">consilium "Should we use microservices or monolith?"</span></div>
-          <div class="terminal-line" style="animation-delay: 0.4s"><span class="t-muted">───────────────────────────────────────────────</span></div>
-          <div class="terminal-line" style="animation-delay: 0.7s"><span class="t-label">Blind phase</span> <span class="t-muted">· 5 models · independent positions</span></div>
-          <div class="terminal-line" style="animation-delay: 1.0s">&nbsp;&nbsp;<span class="t-model">GPT</span> <span class="t-text">Start monolith. Extract services at pain points.</span></div>
-          <div class="terminal-line" style="animation-delay: 1.3s">&nbsp;&nbsp;<span class="t-model">Gemini</span> <span class="t-text">Modular monolith with domain boundaries.</span></div>
-          <div class="terminal-line" style="animation-delay: 1.6s">&nbsp;&nbsp;<span class="t-model">Grok</span> <span class="t-text">Microservices — but only if you have the team.</span></div>
-          <div class="terminal-line" style="animation-delay: 1.9s">&nbsp;&nbsp;<span class="t-model">DeepSeek</span> <span class="t-text">Monolith. Premature distribution is the root of all evil.</span></div>
-          <div class="terminal-line" style="animation-delay: 2.2s">&nbsp;&nbsp;<span class="t-model">GLM</span> <span class="t-text">Event-driven monolith with async boundaries.</span></div>
-          <div class="terminal-line" style="animation-delay: 2.7s"><span class="t-muted">───────────────────────────────────────────────</span></div>
-          <div class="terminal-line" style="animation-delay: 3.0s"><span class="t-label">Debate</span> <span class="t-muted">· round 1 · challenger: Grok</span></div>
-          <div class="terminal-line" style="animation-delay: 3.3s">&nbsp;&nbsp;<span class="t-model">Grok</span> <span class="t-text">4/5 said monolith. But none addressed data team</span></div>
-          <div class="terminal-line" style="animation-delay: 3.5s">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-text">independence. Shared DB = shared bottleneck.</span></div>
-          <div class="terminal-line" style="animation-delay: 3.9s"><span class="t-muted">───────────────────────────────────────────────</span></div>
-          <div class="terminal-line" style="animation-delay: 4.2s"><span class="t-judge">Judge</span> <span class="t-muted">· Claude Opus · ACH synthesis</span></div>
-          <div class="terminal-line" style="animation-delay: 4.5s">&nbsp;&nbsp;<span class="t-highlight">Decision: Modular monolith with event boundaries.</span></div>
-          <div class="terminal-line" style="animation-delay: 4.8s">&nbsp;&nbsp;<span class="t-highlight">Confidence: high (4/5 convergence + challenger</span></div>
-          <div class="terminal-line" style="animation-delay: 5.0s">&nbsp;&nbsp;<span class="t-highlight">raised valid data isolation concern).</span></div>
+          <div class="terminal-line" style="animation-delay: 0.3s"><span class="t-status">(querying 5 models in parallel)</span></div>
+          <div class="terminal-line" style="animation-delay: 0.5s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 0.6s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+          <div class="terminal-line" style="animation-delay: 0.8s"><span class="t-phase"> BLIND POSITIONS </span></div>
+          <div class="terminal-line" style="animation-delay: 0.9s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+          <div class="terminal-line" style="animation-delay: 1.1s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 1.2s"><span class="t-model">GPT</span></div>
+          <div class="terminal-line" style="animation-delay: 1.4s"><span class="t-text">Start monolith. Extract services at pain points, not before.</span></div>
+          <div class="terminal-line" style="animation-delay: 1.5s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 1.6s"><span class="t-model">Gemini</span></div>
+          <div class="terminal-line" style="animation-delay: 1.8s"><span class="t-text">Modular monolith with domain boundaries. Deploy as one,</span></div>
+          <div class="terminal-line" style="animation-delay: 1.9s"><span class="t-text">split later if needed.</span></div>
+          <div class="terminal-line" style="animation-delay: 2.0s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 2.1s"><span class="t-model">Grok</span></div>
+          <div class="terminal-line" style="animation-delay: 2.3s"><span class="t-text">Microservices — but only if you have the team and the</span></div>
+          <div class="terminal-line" style="animation-delay: 2.4s"><span class="t-text">operational maturity. Otherwise you're buying complexity.</span></div>
+          <div class="terminal-line" style="animation-delay: 2.6s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 2.7s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+          <div class="terminal-line" style="animation-delay: 2.9s"><span class="t-phase"> DEBATE: ROUND 1 </span></div>
+          <div class="terminal-line" style="animation-delay: 3.0s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+          <div class="terminal-line" style="animation-delay: 3.1s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 3.2s"><span class="t-model">Grok</span> <span class="t-status">(challenger)</span></div>
+          <div class="terminal-line" style="animation-delay: 3.4s"><span class="t-text">4/5 said monolith. But none addressed data team independence.</span></div>
+          <div class="terminal-line" style="animation-delay: 3.5s"><span class="t-text">Shared DB = shared bottleneck.</span></div>
+          <div class="terminal-line" style="animation-delay: 3.7s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 3.8s"><span class="t-notice">&gt;&gt;&gt; Consensus detected (4/5 agreement) — debate concluded</span></div>
+          <div class="terminal-line" style="animation-delay: 4.0s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 4.1s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+          <div class="terminal-line" style="animation-delay: 4.3s"><span class="t-phase"> JUDGE SYNTHESIS </span></div>
+          <div class="terminal-line" style="animation-delay: 4.4s"><span class="t-sep">────────────────────────────────────────────────────────────</span></div>
+          <div class="terminal-line" style="animation-delay: 4.5s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 4.6s"><span class="t-section">Recommendation</span></div>
+          <div class="terminal-line" style="animation-delay: 4.8s"><span class="t-text">Modular monolith with event-driven boundaries. Challenger</span></div>
+          <div class="terminal-line" style="animation-delay: 4.9s"><span class="t-text">raised valid data isolation concern — address with async</span></div>
+          <div class="terminal-line" style="animation-delay: 5.0s"><span class="t-text">event bus for cross-domain communication.</span></div>
+          <div class="terminal-line" style="animation-delay: 5.2s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 5.3s"><span class="t-confidence">Confidence: high (4/5 convergence)</span></div>
+          <div class="terminal-line" style="animation-delay: 5.5s">&nbsp;</div>
+          <div class="terminal-line" style="animation-delay: 5.6s"><span class="t-stats">(14.2s, ~$0.48)</span></div>
         </div>
       </div>
     </section>
