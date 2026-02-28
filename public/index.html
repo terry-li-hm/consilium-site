@@ -206,13 +206,14 @@
       z-index: 1;
     }
 
-    /* ─── HERO: Clean, left-aligned ─── */
+    /* ─── HERO ─── */
     .hero {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
+      text-align: center;
       position: relative;
       padding: 6rem 0 5rem;
     }
@@ -230,12 +231,12 @@
     .hero-name {
       font-family: var(--display);
       font-size: clamp(3.5rem, 10vw, 7rem);
-      font-weight: 300;
-      letter-spacing: 0.22em;
+      font-weight: 400;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #dde2ef;
       line-height: 1;
-      margin-bottom: 0.4em;
+      margin-bottom: 0.3em;
       animation: fadeUp 1s ease-out;
       text-shadow:
         0 0 40px rgba(139, 172, 212, 0.1),
@@ -621,10 +622,10 @@
       .container { padding: 0 1.5rem; }
       section { padding: 5rem 0; }
 
-      .hero { min-height: auto; padding: 4rem 0 3rem; }
+      .hero { min-height: auto; padding: 4rem 0 3rem; text-align: center; align-items: center; }
       .hero-name {
-        letter-spacing: 0.1em;
-        font-size: clamp(2.4rem, 11vw, 4rem);
+        letter-spacing: 0.08em;
+        font-size: clamp(2.6rem, 12vw, 4rem);
       }
       .hero-latin { font-size: 0.95rem; margin-bottom: 2rem; }
       .hero-desc { font-size: 1rem; margin-bottom: 2.5rem; }
