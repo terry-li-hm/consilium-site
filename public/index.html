@@ -206,13 +206,15 @@
       z-index: 1;
     }
 
-    /* ─── HERO: Demo-first, left-aligned ─── */
+    /* ─── HERO: Clean, left-aligned ─── */
     .hero {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       align-items: flex-start;
       position: relative;
-      padding: 6rem 0 4rem;
+      padding: 6rem 0 5rem;
     }
 
     .hero::after {
@@ -227,13 +229,13 @@
 
     .hero-name {
       font-family: var(--display);
-      font-size: clamp(2.4rem, 7vw, 4.5rem);
+      font-size: clamp(3.5rem, 10vw, 7rem);
       font-weight: 400;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: #dde2ef;
       line-height: 1;
-      margin-bottom: 0.5em;
+      margin-bottom: 0.4em;
       animation: fadeUp 1s ease-out;
       text-shadow:
         0 0 40px rgba(139, 172, 212, 0.1),
@@ -244,35 +246,29 @@
       color: var(--accent);
     }
 
-    .hero-tagline {
+    .hero-latin {
+      font-family: var(--display);
+      font-style: italic;
       font-size: 1.1rem;
+      font-weight: 300;
       color: var(--text-muted);
       margin-bottom: 2.5rem;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.05em;
       animation: fadeUp 1s ease-out 0.15s both;
     }
 
-    .hero-tagline strong {
-      color: var(--text);
-      font-weight: 400;
-    }
-
-    .hero-demo {
-      width: 100%;
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 540px;
       margin-bottom: 3rem;
+      line-height: 1.75;
       animation: fadeUp 1s ease-out 0.3s both;
     }
 
-    .hero-demo .terminal {
-      margin-top: 0;
-    }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 520px;
-      margin-bottom: 2.5rem;
-      animation: fadeUp 1s ease-out 0.5s both;
+    .hero-desc strong {
+      color: var(--text);
+      font-weight: 500;
     }
 
     .install-block {
@@ -625,14 +621,13 @@
       .container { padding: 0 1.5rem; }
       section { padding: 5rem 0; }
 
-      .hero { padding: 4rem 0 3rem; }
+      .hero { min-height: auto; padding: 4rem 0 3rem; }
       .hero-name {
         letter-spacing: 0.1em;
-        font-size: clamp(2rem, 10vw, 3.2rem);
+        font-size: clamp(2.4rem, 11vw, 4rem);
       }
-      .hero-tagline { font-size: 1rem; margin-bottom: 2rem; }
-      .hero-demo { margin-bottom: 2.5rem; }
-      .hero-desc { font-size: 1rem; }
+      .hero-latin { font-size: 0.95rem; margin-bottom: 2rem; }
+      .hero-desc { font-size: 1rem; margin-bottom: 2.5rem; }
 
       .pipeline {
         grid-template-columns: 1fr;
@@ -826,24 +821,12 @@
 
   <div class="container">
 
-    <!-- HERO: Demo-first -->
+    <!-- HERO -->
     <section class="hero">
       <h1 class="hero-name">Consili<span>um</span></h1>
-      <p class="hero-tagline"><strong>5 frontier LLMs debate. Claude judges.</strong></p>
-
-      <div class="hero-demo">
-        <div class="terminal">
-          <div class="terminal-bar">
-            <div class="terminal-dot"></div>
-            <div class="terminal-dot"></div>
-            <div class="terminal-dot"></div>
-            <span class="terminal-title">consilium — council mode</span>
-          </div>
-          <div class="terminal-body" id="hero-terminal"></div>
-        </div>
-      </div>
-
+      <p class="hero-latin">consilium (Latin): counsel, deliberation, plan</p>
       <p class="hero-desc">
+        <strong>5 frontier LLMs debate. Claude judges.</strong>
         Structured multi-model deliberation for decisions that matter,
         grounded in decades of group reasoning research.
       </p>
@@ -879,6 +862,22 @@
           <div class="step-title">Judgement</div>
           <div class="step-desc">Claude Opus synthesises using Analysis of Competing Hypotheses. Evaluates evidence against each position. Eliminates rather than confirms.</div>
         </div>
+      </div>
+    </section>
+
+    <!-- IN PRACTICE -->
+    <section class="reveal">
+      <div class="section-label">In practice</div>
+      <h2>A council in session</h2>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <div class="terminal-dot"></div>
+          <span class="terminal-title">consilium — council mode</span>
+        </div>
+        <div class="terminal-body" id="hero-terminal"></div>
       </div>
     </section>
 
@@ -1030,7 +1029,7 @@
     // stream = text to type char-by-char, with class for styling
     // pause = ms to wait before next entry
     const script = [
-      { html: '<span class="t-prompt">$</span> ', stream: 'consilium "Should we acquire this fintech or build in-house?"', cls: 't-cmd', speed: 28 },
+      { html: '<span class="t-prompt">$</span> ', stream: 'consilium "Should we build our AI capability in-house or partner with a vendor?"', cls: 't-cmd', speed: 28 },
       { pause: 400 },
       { html: '<span class="t-status">(querying 5 models in parallel)</span>', pause: 700 },
       { html: '&nbsp;' },
@@ -1039,33 +1038,33 @@
       { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '&nbsp;' },
       { html: '<span class="t-model">### GPT-5.2 Pro</span>' },
-      { stream: 'Acquire. Time-to-market advantage outweighs the integration cost. Their regulatory approvals alone took 18 months.', cls: 't-text' },
+      { stream: 'Partner first. Vendor gets you to market in 3 months. Build the proprietary layer once you know what problems actually matter.', cls: 't-text' },
       { html: '&nbsp;' },
       { html: '<span class="t-model">### Gemini 3.1 Pro</span>' },
-      { stream: 'Build. Their tech debt is a liability, not an asset. You\'d spend more unwinding it than starting clean.', cls: 't-text' },
+      { stream: 'Build. Vendors create dependency and your data is the moat. Outsourcing AI is outsourcing your competitive advantage.', cls: 't-text' },
       { html: '&nbsp;' },
       { html: '<span class="t-model">### Grok 4</span>' },
-      { stream: 'Acquire, but only at 0.6x revenue. Above that, build. The talent is the real asset — structure an acqui-hire fallback.', cls: 't-text' },
+      { stream: 'Partner for commoditised tasks, build for anything that touches proprietary data or customer decisions. The distinction is what matters.', cls: 't-text' },
       { html: '&nbsp;', pause: 300 },
       { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '<span class="t-phase"> DEBATE: ROUND 1 </span>', pause: 200 },
       { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '&nbsp;' },
       { html: '<span class="t-model">### Gemini 3.1 Pro</span> <span class="t-status">(challenger)</span>' },
-      { stream: 'Everyone\'s pricing in the regulatory moat, but none of you modelled the integration timeline. 12–18 months to merge platforms — by then you could build v1.', cls: 't-text' },
+      { stream: 'The "build the moat" argument assumes you have the talent to build it. Most teams don\'t. A bad in-house model is worse than a good vendor model.', cls: 't-text' },
       { html: '&nbsp;', pause: 200 },
-      { html: '<span class="t-notice">&gt;&gt;&gt; CONSENSUS DETECTED (4/5: acquire with conditions) - proceeding to judge</span>', pause: 500 },
+      { html: '<span class="t-notice">&gt;&gt;&gt; CONSENSUS DETECTED (4/5: hybrid approach) - proceeding to judge</span>', pause: 500 },
       { html: '&nbsp;' },
       { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '<span class="t-phase"> JUDGE SYNTHESIS </span>', pause: 200 },
       { html: '<span class="t-sep">════════════════════════════════════════════════════</span>' },
       { html: '&nbsp;' },
       { html: '<span class="t-section">## Recommendation</span>' },
-      { stream: 'Conditional acquisition at ≤0.6x revenue with 90-day technical due diligence. Challenger\'s integration risk is valid — require escrow tied to platform migration milestones. If price exceeds threshold, pivot to acqui-hire for the compliance team.', cls: 't-text', speed: 18 },
+      { stream: 'Partner for the first 12 months to establish product-market fit and surface the genuinely proprietary problems. Run an internal team in parallel to build institutional knowledge. Re-evaluate build vs extend at month 9. Challenger\'s talent constraint is decisive — don\'t build before you can staff it.', cls: 't-text', speed: 18 },
       { html: '&nbsp;' },
       { html: '<span class="t-confidence">Confidence: 8/10</span>' },
       { html: '&nbsp;' },
-      { html: '<span class="t-stats">(18.7s, ~$0.52)</span>' },
+      { html: '<span class="t-stats">(16.3s, ~$0.49)</span>' },
     ];
 
     function addLine(container, innerHTML) {
