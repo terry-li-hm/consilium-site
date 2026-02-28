@@ -606,6 +606,17 @@
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 768px) {
+      .container { padding: 0 1.4rem; }
+      section { padding: 5rem 0; }
+
+      .hero-name {
+        letter-spacing: 0.08em;
+        font-size: clamp(2.8rem, 12vw, 4.5rem);
+      }
+      .hero-latin { font-size: 1rem; margin-bottom: 2rem; }
+      .hero-desc { font-size: 1.05rem; }
+      .hero::after { height: 60px; }
+
       .pipeline {
         grid-template-columns: 1fr;
         gap: 1rem;
@@ -614,21 +625,33 @@
         transform: rotate(90deg);
         padding: 0;
       }
-      .modes-grid {
-        grid-template-columns: 1fr;
+      .pipeline-step { padding: 1.5rem 1.3rem; }
+
+      .terminal { border-radius: 8px; }
+      .terminal-body {
+        font-size: 0.72rem;
+        padding: 1rem 1rem;
+        line-height: 1.7;
       }
-      .research-grid {
-        grid-template-columns: 1fr;
+      .terminal-body .t-sep { font-size: 0.6rem; }
+
+      .modes-grid { grid-template-columns: 1fr; }
+      .research-grid { grid-template-columns: 1fr; }
+
+      .footer { flex-direction: column; }
+
+      /* Fewer stars visible on small screens — hide bright pulsing ones at edges */
+      .star-bright:nth-child(5),
+      .star-bright:nth-child(8) { display: none; }
+    }
+
+    @media (max-width: 420px) {
+      .hero-name { letter-spacing: 0.05em; }
+      .install-block {
+        font-size: 0.78rem;
+        padding: 0.8rem 1rem;
       }
-      .footer {
-        flex-direction: column;
-      }
-      .hero-name {
-        letter-spacing: 0.1em;
-      }
-      section {
-        padding: 5rem 0;
-      }
+      .terminal-body { font-size: 0.68rem; }
     }
 
     /* ─── ANIMATIONS ─── */
